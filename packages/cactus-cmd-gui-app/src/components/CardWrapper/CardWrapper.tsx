@@ -1,19 +1,13 @@
-import {
-  createSignal,
-  createEffect,
-  ParentComponent,
-  onCleanup,
-} from "solid-js";
+import { createSignal, createEffect, ParentComponent } from "solid-js";
+import Button from "../UI/Button/Button";
+// @ts-expect-error
+import styles from "./CardWrapper.module.css";
 import { TbCactus } from "solid-icons/tb";
 import { useNavigate } from "@solidjs/router";
-import Button from "../UI/Button/Button";
 import Search from "../UI/Search/Search";
 import CustomTable from "../UI/CustomTable/CustomTable";
 import { TableProps } from "../../schema/supabase-types";
 import Pagination from "../Pagination/Pagination";
-// @ts-expect-error
-import styles from "./CardWrapper.module.css";
-import EmptyTablePlaceholder from "../UI/CustomTable/EmptyTablePlaceholder/EmptyTablePlaceholder";
 
 type cardWrapperProp = {
   filters?: string[];
@@ -25,7 +19,7 @@ type cardWrapperProp = {
   getSearchValue?: (val: string) => {};
 };
 
-const pageSize: number = 6;
+const pageSize: number = 2;
 
 const CardWrapper: ParentComponent<cardWrapperProp> = (props) => {
   const navigate = useNavigate();
@@ -34,7 +28,6 @@ const CardWrapper: ParentComponent<cardWrapperProp> = (props) => {
   const [paginatedData, setPaginatedData] = createSignal<any[]>([]);
   const [currentPage, setCurrentPage] = createSignal<number>(1);
   const [totalPages, setTotalPages] = createSignal<number>(1);
-  const [viewport, setViewport] = createSignal("");
 
   const handleGoToPage = (pageNumber: number) => {
     if (pageNumber < 1 || pageNumber > totalPages()) return;
@@ -60,7 +53,7 @@ const CardWrapper: ParentComponent<cardWrapperProp> = (props) => {
     let newData = data.filter((row) => {
       let isMatch: boolean = false;
       filters?.forEach((property) => {
-        if (row[property]?.toString().toLowerCase().includes(searchKey())) {
+        if (row[property].toString().toLowerCase().includes(searchKey())) {
           isMatch = true;
         }
       });
@@ -81,16 +74,6 @@ const CardWrapper: ParentComponent<cardWrapperProp> = (props) => {
   });
 
   createEffect(() => {
-    const screenResized = () =>
-      setViewport(window.innerWidth <= 1699 ? "small" : "wide");
-    screenResized();
-    window.addEventListener("resize", screenResized, true);
-    onCleanup(() => {
-      window.removeEventListener("resize", screenResized, true);
-    });
-  });
-
-  createEffect(() => {
     if (filteredData().length <= pageSize) {
       setPaginatedData(filteredData());
     } else {
@@ -106,24 +89,13 @@ const CardWrapper: ParentComponent<cardWrapperProp> = (props) => {
 
   return (
     <section
-      class={`${styles["wrapper"]} ${
-        props.display === "small"
-          ? styles["wrapper-half-width"]
-          : styles["wrapper-full-width"]
-      }`}
+      class={styles["wrapper"]}
+      style={{ width: `${props.display === "small" ? "50%" : "100%"}` }}
     >
       <header class={styles["wrapper-header"]}>
         <span class={styles["wrapper-title"]}>
           <TbCactus /> {props.title}
         </span>
-        {props.trimmed && viewport() === "small" && (
-          <Button
-            type={"primary"}
-            onClick={() => navigate(`./${props.title.toLowerCase()}`)}
-          >
-            View all
-          </Button>
-        )}
         {props.filters && (
           <div class={styles["wrapper-search"]}>
             <Search
@@ -139,14 +111,14 @@ const CardWrapper: ParentComponent<cardWrapperProp> = (props) => {
         {props?.columns && props.data?.length > 0 && (
           <CustomTable cols={props.columns} data={paginatedData()} />
         )}
-        {props?.data?.length === 0 && <EmptyTablePlaceholder />}
+        {props.children}
       </div>
       <div class={styles["wrapper-btns"]}>
         {" "}
-        {props.trimmed && viewport() === "wide" && (
+        {props.trimmed && (
           <Button
             type={"primary"}
-            onClick={() => navigate(`./${props.title.toLowerCase()}`)}
+            onClick={() => navigate(`/${props.title.toLowerCase()}`)}
           >
             View all
           </Button>

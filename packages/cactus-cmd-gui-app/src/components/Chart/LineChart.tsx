@@ -1,9 +1,9 @@
 import { SolidApexCharts } from "solid-apexcharts";
 import { createSignal, createEffect, Component } from "solid-js";
-import moment from "moment";
-import { balanceDate } from "../../schema/supabase-types";
 // @ts-expect-error
 import styles from "./Chart.module.css";
+import moment from "moment";
+import { balanceDate } from "../../schema/supabase-types";
 
 const LineChart: Component<{ chartData: any }> = (props) => {
   const [chartProps, setChartProps] = createSignal({

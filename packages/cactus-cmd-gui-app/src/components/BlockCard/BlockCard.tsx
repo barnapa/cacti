@@ -16,11 +16,11 @@ const BlockCard: Component<{
 
   return (
     <div class={styles["block-card"]} onClick={handleClick}>
-      <p> {props.created_at.toLocaleString()}</p>
-      <p class={styles["block-num"]}>{props.number}</p>
-      <p class={styles["block-hash"]}>
+      <span> {props.created_at.toLocaleString()}</span>
+      <span class={styles["block-num"]}>{props.number}</span>
+      <span class={styles["block-hash"]}>
         <HiSolidHashtag /> {props.hash}
-      </p>
+      </span>
     </div>
   );
 };

@@ -1,7 +1,7 @@
-import { BiRegularWallet } from "solid-icons/bi";
-import { Component } from "solid-js";
 // @ts-expect-error
 import styles from "./TokenHeader.module.css";
+import { BiRegularWallet } from "solid-icons/bi";
+import { Component } from "solid-js";
 
 const TokenAccount: Component<{ accountNum: string }> = (props) => {
   return (

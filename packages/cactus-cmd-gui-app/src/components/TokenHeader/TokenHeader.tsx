@@ -1,10 +1,10 @@
+// @ts-expect-error
+import styles from "./TokenHeader.module.css";
 import TokenAccount from './TokenAccount'
 import { Component } from 'solid-js'
 import { createSignal, createEffect } from 'solid-js'
 import { TokenMetadata20 } from '../../schema/supabase-types'
 import { supabase } from '../../supabase-client'
-// @ts-expect-error
-import styles from "./TokenHeader.module.css";
 
 const TokenHeader: Component<{ accountNum: string; token_address: string }> = (
   props,
@@ -30,19 +30,19 @@ const TokenHeader: Component<{ accountNum: string; token_address: string }> = (
 
   return (
     <div class={styles["token-header"]}>
-            <TokenAccount accountNum={props.accountNum} />
       <div class={styles["token-details"]}>
-        <p>
+        <span>
           <b>Address:</b> {props.token_address}
-        </p>
-        <p>
+        </span>
+        <span>
           <b>Created at:</b> {tokenData()?.created_at}
-        </p>
-        <p>
-          <b>Total supply: </b>
+        </span>
+        <span>
+          <b>Total supply:</b>
           {tokenData()?.total_supply}
-        </p>
+        </span>
       </div>
+      <TokenAccount accountNum={props.accountNum} />
     </div>
   );
 };

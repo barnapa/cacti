@@ -1,8 +1,8 @@
 import { SolidApexCharts } from "solid-apexcharts";
 import { createSignal, createEffect, Component } from "solid-js";
-import { ERC20Txn } from "../../schema/supabase-types";
 // @ts-expect-error
 import styles from "./Chart.module.css";
+import { ERC20Txn } from "../../schema/supabase-types";
 
 const Chart: Component<{ chartData: any }> = (props) => {
   const [chartProps, setChartProps] = createSignal<{
@@ -53,8 +53,8 @@ const Chart: Component<{ chartData: any }> = (props) => {
   return (
     <div class={styles["chart-wrapper"]}>
       <span>Balance</span>
-      <SolidApexCharts 
-        width={650}
+      <SolidApexCharts
+        width="700"
         type="bar"
         options={chartProps().options}
         series={chartProps().series.list}

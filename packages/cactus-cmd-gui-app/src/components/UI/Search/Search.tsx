@@ -1,7 +1,7 @@
-import { Component, createSignal } from "solid-js";
-import { BiRegularReset } from "solid-icons/bi";
 // @ts-expect-error
 import styles from "./Search.module.css";
+import { Component, createSignal } from "solid-js";
+import { BiRegularReset } from "solid-icons/bi";
 
 const Search: Component<{
   type: string;
@@ -12,6 +12,7 @@ const Search: Component<{
 
   const handleInput = (e: InputEvent | ClipboardEvent) => {
     const inputValue = (e.currentTarget as HTMLInputElement).value;
+    console.log(inputValue);
     if (inputValue) {
       setValue(inputValue);
       props.onKeyUp(inputValue);
