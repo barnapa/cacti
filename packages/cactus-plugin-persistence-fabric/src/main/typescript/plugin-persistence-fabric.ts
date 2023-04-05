@@ -1,6 +1,4 @@
-import // IPluginFactoryOptions,
-// PluginFactory,
-"@hyperledger/cactus-core-api";
+import "@hyperledger/cactus-core-api";
 import { sha256 } from "js-sha256";
 
 import {
@@ -16,10 +14,6 @@ import {
   ICactusPluginOptions,
 } from "@hyperledger/cactus-core-api";
 
-// errors
-//import { RuntimeError } from "run-time-error";
-
-import { Mutex } from "async-mutex";
 import type { Express } from "express";
 
 import {
@@ -39,7 +33,6 @@ import { AxiosResponse } from "axios";
 import { QueryResult } from "pg";
 import { getStatusReturn, InsertBlockDataEntryInterface } from "./types";
 
-//import { BlockTransactionObject } from "web3-eth"; //
 
 export interface IPluginPersistenceFabricOptions extends ICactusPluginOptions {
   gatewayOptions: GatewayOptions;
@@ -60,8 +53,7 @@ export class PluginPersistenceFabric
   private isConnected = false;
   private isWebServicesRegistered = false;
 
-  private pushBlockMutex = new Mutex();
-  private syncBlocksMutex = new Mutex();
+
 
   private failedBlocks = new Set<number>();
 
@@ -73,8 +65,6 @@ export class PluginPersistenceFabric
   //check which blocks are missing
   private missedBlocks: string[] = [];
   private howManyBlocksMissing = 0;
-  // connection
-  //public fabricConnectorPlugin: PluginLedgerConnectorFabric;
 
   public ledgerChannelName = "mychannel";
   public ledgerContractName = "basic";
@@ -107,38 +97,6 @@ export class PluginPersistenceFabric
     this.isConnected = false;
   }
 
-  // public async getOrCreateWebServices(): Promise<IWebServiceEndpoint[]> {
-  // const { log } = this;
-  // const pkgName = this.getPackageName();
-  // if (this.endpoints) {
-  //   return this.endpoints;
-  // }
-  // this.log.info(`Creating web services for plugin ${pkgName}...`);
-  // const endpoints: IWebServiceEndpoint[] = [];
-  // {
-  //   const endpoint = new StatusEndpointV1({
-  //     connector: this,
-  //     logLevel: this.options.logLevel,
-  //   });
-  //   endpoints.push(endpoint);
-  // }
-  // this.endpoints = endpoints;
-  // this.log.info(`Instantiated web services for plugin ${pkgName} OK`, {
-  //   endpoints,
-  // });
-  // return endpoints;
-  // }
-
-  // public async registerWebServices(
-  //   app: Express,
-  // ): Promise<IWebServiceEndpoint[]> {
-  //   const webServices = await this.getOrCreateWebServices();
-  //   webServices.forEach((ws) => ws.registerExpress(app));
-  //   this.isWebServicesRegistered = true;
-  //   return webServices;
-  // }
-  //
-  //
   public getStatus(): getStatusReturn {
     return {
       instanceId: this.instanceId,
@@ -206,7 +164,7 @@ export class PluginPersistenceFabric
     webServices.forEach((ws) => ws.registerExpress(app));
     return webServices;
   }
-
+  // For future development
   public async getOrCreateWebServices(): Promise<IWebServiceEndpoint[]> {
     const pkgName = this.getPackageName();
 
@@ -216,13 +174,7 @@ export class PluginPersistenceFabric
     this.log.info(`Creating web services for plugin ${pkgName}...`);
 
     const endpoints: IWebServiceEndpoint[] = [];
-    // {
-    //   const options = { keyPairPem, consortiumRepo, plugin: this };
-    //   const endpoint = new GetConsortiumEndpointV1(options);
-    //   endpoints.push(endpoint);
-    //   const path = endpoint.getPath();
-    //   this.log.info(`Instantiated GetConsortiumEndpointV1 at ${path}`);
-    // }
+
     this.endpoints = endpoints;
 
     this.log.info(`Instantiated web svcs for plugin ${pkgName} OK`, {
@@ -355,10 +307,6 @@ export class PluginPersistenceFabric
         this.log.info(logBlock);
         this.log.info("Block number: ", blockNumber);
 
-        // if (!this.dbClient.isConnected) {
-        //   await this.dbClient.connect();
-        //   this.isConnected = true;
-        // }
         if (moreBlocks) {
           await this.migrateBlockNrWithTransactions(blockNumber);
           this.lastSeenBlock = tempBlockNumber;
@@ -414,15 +362,6 @@ export class PluginPersistenceFabric
         }
 
         if (block.status == 200) {
-          const tempBlockstep1 = JSON.stringify(block.data);
-          const tempBlock = JSON.parse(tempBlockstep1);
-          // Put scrapped block into database
-          this.log.info(tempBlock);
-
-          // if (!this.dbClient.isConnected) {
-          //   await this.dbClient.connect();
-          //   this.isConnected = true;
-          // }
 
           await this.migrateBlockNrWithTransactions(blockNumber);
           this.lastSeenBlock = tempBlockNumber;
@@ -480,17 +419,7 @@ export class PluginPersistenceFabric
         }
 
         if (block.status == 200) {
-          const tempBlockstep1 = JSON.stringify(block.data);
-          const tempBlock = JSON.parse(tempBlockstep1);
-          // Put scrapped block into database
-          this.log.info(tempBlock);
-
-          // if (!this.dbClient.isConnected) {
-          //   await this.dbClient.connect();
-          //   this.isConnected = true;
-          // }
-
-          const isThisBlockPresent = await this.dbClient.isThisBlockInDB(
+           const isThisBlockPresent = await this.dbClient.isThisBlockInDB(
             tempBlockNumber,
           );
 
@@ -578,10 +507,6 @@ export class PluginPersistenceFabric
       fabric_block_num: Number(blockNumber),
       fabric_block_data: JSON.stringify(block.data),
     };
-    // if (!this.dbClient.isConnected) {
-    //   await this.dbClient.connect();
-    //   this.isConnected = true;
-    // }
 
     // Put scrapped block into database
     const txLen = tempBlockParse.decodedBlock.data.data.length;
@@ -600,7 +525,6 @@ export class PluginPersistenceFabric
       let endorser_id_bytes = "";
       let end_mspid = "";
       let chaincode_proposal_input = "";
-      let chaincode = "";
       let rwset;
       let readSet;
       let writeSet;
@@ -608,7 +532,6 @@ export class PluginPersistenceFabric
       let status;
       let tx_response = "";
       let creator_nonce = "";
-      // add txIndex in block
       let read_set = "";
       let write_set = "";
 
@@ -626,12 +549,9 @@ export class PluginPersistenceFabric
       if (creator_nonce !== undefined) {
         creator_nonce = Buffer.from(creator_nonce).toString("hex");
       }
-      /* eslint-disable */
+      
       const creator_id_bytes = transactionDataObject.payload.header.signature_header.creator.id_bytes.data.toString();
       if (transactionDataObject.payload.data.actions !== undefined) {
-        chaincode =
-          transactionDataObject.payload.data.actions[0].payload.action
-            .proposal_response_payload.extension.chaincode_id.name;
         chaincodeID =
           transactionDataObject.payload.data.actions[0].payload.action
             .proposal_response_payload.extension;
@@ -660,8 +580,8 @@ export class PluginPersistenceFabric
           let inputs = "";
           for (const input of chaincode_proposal_input) {
             inputs =
-              (inputs === "" ? inputs : `${inputs},`) +
-              Buffer.from(input).toString("utf8");
+              (inputs === "" ? inputs : (`${inputs}`).toString("utf8")) + "," +
+              (Buffer.from(input).toString("hex")).toString("utf8");
           }
           chaincode_proposal_input = inputs;
         }
@@ -704,7 +624,7 @@ export class PluginPersistenceFabric
       }
 
 
-      const chaincode_id: string = JSON.stringify(chaincodeID);
+      const chaincode_id: string = "" + JSON.stringify(chaincodeID);
 
       let chaincodename: string = "";
       // checking if proposal_response_payload is present and operational
@@ -865,7 +785,6 @@ If some blocks above this number are already in database they will not be remove
           const migrateBlock = await this.migrateBlockNrWithTransactions(
             blockNumber,
           );
-          // insertBlockTransactionEntry
           if (migrateBlock) {
             const delSynchronized = this.missedBlocks.indexOf(blockNumber);
             delete this.missedBlocks[delSynchronized];
@@ -874,8 +793,7 @@ If some blocks above this number are already in database they will not be remove
           this.howManyBlocksMissing = this.howManyBlocksMissing - 1;
         }
 
-        // TODO add check missedBlocks.length against howManyBlocksMissing
-        if (this.howManyBlocksMissing <= 0) {
+                if (this.howManyBlocksMissing <= 0) {
           moreBlocks = false;
         }
       } while (moreBlocks);

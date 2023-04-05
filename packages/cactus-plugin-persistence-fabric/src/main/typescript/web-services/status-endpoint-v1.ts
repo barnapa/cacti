@@ -50,13 +50,6 @@ export class StatusEndpointV1 implements IWebServiceEndpoint {
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public getOasPath(): any {
-    this.log.debug(OAS);
-    // return OAS.paths[
-    //   "/api/v1/plugins/@hyperledger/plugin-factory-block-fabrick-persistance/status"
-    // ];
-  }
-
   public getPath(): string {
     const apiPath = this.getOasPath();
     return apiPath.get["x-hyperledger-cactus"].http.path;
