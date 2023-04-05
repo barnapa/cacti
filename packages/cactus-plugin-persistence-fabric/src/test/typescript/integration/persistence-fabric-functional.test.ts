@@ -101,8 +101,6 @@ const log: Logger = LoggerProvider.getOrCreate({
  * Main test suite
  */
 describe("Persistence Fabric", () => {
-  // const testPluginName = "TestPlugin";
-  // const testPluginInstanceId = "testInstance";
   let ledger: FabricTestLedgerV1;
   let signingCredential: FabricSigningCredential;
   let fabricConnectorPlugin: PluginLedgerConnectorFabric;
@@ -116,7 +114,6 @@ describe("Persistence Fabric", () => {
   let tmpWalletDir: string;
   let connectorCertValue: string;
   let connectorPrivKeyValue: string;
-  // let postgresContainer: PostgresTestContainer;
 
   let instanceId: string;
 
@@ -129,11 +126,7 @@ describe("Persistence Fabric", () => {
       testData,
     );
   }
-  // function isThisBlockInDbMock(blockNumber: number) {
-  //   (dbClientInstance.isThisBlockInDB as jest.Mock).mockReturnValue(
-  //     blockNumber,
-  //   );
-  // }
+
   function getMaxBlockNumberMock(blockNumber: number) {
     (dbClientInstance.getMaxBlockNumber as jest.Mock).mockReturnValue(
       blockNumber,
@@ -163,7 +156,6 @@ describe("Persistence Fabric", () => {
     }
   }
 
-  ////////////////////
   function createFabricConnectorConfig(
     connectionProfile: Record<string, any>,
     connectorCert: string,
@@ -436,10 +428,8 @@ describe("Persistence Fabric", () => {
       instanceId,
       connectionString: `db-is-mocked`,
     });
-    // await persistence.onPluginInit();
     expect(DatabaseClientMock).toHaveBeenCalledTimes(1);
     dbClientInstance = DatabaseClientMock.mock.instances[0];
-    // log.warn("dbClientInstance", dbClientInstance);
     expect(dbClientInstance).toBeTruthy();
   });
 
@@ -488,12 +478,6 @@ describe("Persistence Fabric", () => {
       log.info("Disconnect the PostgresDatabaseClient");
       await dbClient.shutdown();
     }
-    // if (postgresContainer) {
-    //   log.info("Disconnect the PostgresDatabaseClient");
-
-    //   await postgresContainer.stop();
-    //   await postgresContainer.destroy();
-    // }
 
     // Wait for monitor to be terminated
     await new Promise((resolve) => setTimeout(resolve, 8000));
@@ -506,7 +490,6 @@ describe("Persistence Fabric", () => {
     clearMockTokenMetadata();
   }, setupTimeout);
 
-  // currently there is no option like "latest"
   test("onPluginInit creates DB schema and fetches the monitored tokens", async () => {
     await persistence.onPluginInit();
     const initDBCalls = dbClientInstance.initializePlugin.mock.calls;
@@ -528,7 +511,6 @@ describe("Persistence Fabric", () => {
     });
   });
 
-  //helpers
   //creating test transaction on ledger.
   test("create test transaction 1", async () => {
     const createAssetResponse = await apiClient.runTransactionV1({
@@ -694,7 +676,7 @@ describe("Persistence Fabric", () => {
   test("getblock", async () => {
     const blockNumber = "1";
     const block = await persistence.getBlockFromLedger(blockNumber);
-    // log.warn("getBlockFromLedger", JSON.stringify(block));
+
     expect(block).toBeTruthy();
     expect(block).toMatchObject({
       decodedBlock: {
@@ -762,7 +744,7 @@ describe("Persistence Fabric", () => {
   //});
 
   // this test will finish with timout only
-  //test.skip("continuousBlocksSynchronization", async () => {
+  //test("continuousBlocksSynchronization", async () => {
    // const continuousBlocksSynchronization = await persistence.continuousBlocksSynchronization(signingCredential);
   //  expect(continuousBlocksSynchronization).toEqual("stopped");
   //});

@@ -2,7 +2,6 @@ import "@hyperledger/cactus-core-api";
 import { sha256 } from "js-sha256";
 
 import {
-  //Checks,
   Logger,
   LoggerProvider,
   LogLevelDesc,
