@@ -274,7 +274,6 @@ export default class PostgresDatabaseClient {
   }
 
   public async isThisBlockInDB(block_num: number): Promise<QueryResult> {
-    
     this.assertConnected();
     const response = await this.client.query(
       `select * from public.fabric_blocks_entry where block_num = $1`,

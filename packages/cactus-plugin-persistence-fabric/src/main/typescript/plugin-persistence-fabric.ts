@@ -32,7 +32,6 @@ import { AxiosResponse } from "axios";
 import { QueryResult } from "pg";
 import { getStatusReturn, InsertBlockDataEntryInterface } from "./types";
 
-
 export interface IPluginPersistenceFabricOptions extends ICactusPluginOptions {
   gatewayOptions: GatewayOptions;
   apiClient: FabricApiClient;
@@ -51,8 +50,6 @@ export class PluginPersistenceFabric
   private endpoints: IWebServiceEndpoint[] | undefined;
   private isConnected = false;
   private isWebServicesRegistered = false;
-
-
 
   private failedBlocks = new Set<number>();
 
@@ -361,7 +358,6 @@ export class PluginPersistenceFabric
         }
 
         if (block.status == 200) {
-
           await this.migrateBlockNrWithTransactions(blockNumber);
           this.lastSeenBlock = tempBlockNumber;
           tempBlockNumber = tempBlockNumber + 1;
@@ -418,7 +414,7 @@ export class PluginPersistenceFabric
         }
 
         if (block.status == 200) {
-           const isThisBlockPresent = await this.dbClient.isThisBlockInDB(
+          const isThisBlockPresent = await this.dbClient.isThisBlockInDB(
             tempBlockNumber,
           );
 
@@ -548,7 +544,7 @@ export class PluginPersistenceFabric
       if (creator_nonce !== undefined) {
         creator_nonce = Buffer.from(creator_nonce).toString("hex");
       }
-      
+
       const creator_id_bytes = transactionDataObject.payload.header.signature_header.creator.id_bytes.data.toString();
       if (transactionDataObject.payload.data.actions !== undefined) {
         chaincodeID =
@@ -579,8 +575,9 @@ export class PluginPersistenceFabric
           let inputs = "";
           for (const input of chaincode_proposal_input) {
             inputs =
-              (inputs === "" ? inputs : (`${inputs}`).toString("utf8")) + "," +
-              (Buffer.from(input).toString("hex")).toString("utf8");
+              (inputs === "" ? inputs : `${inputs}`.toString()) +
+              "," +
+              Buffer.from(input).toString("hex").toString();
           }
           chaincode_proposal_input = inputs;
         }
@@ -621,7 +618,6 @@ export class PluginPersistenceFabric
           tempBlockParse.decodedBlock.data.data[txIndex].payload.header
             .channel_header.tx_id;
       }
-
 
       const chaincode_id: string = "" + JSON.stringify(chaincodeID);
 
@@ -767,20 +763,16 @@ If some blocks above this number are already in database they will not be remove
         blockNumber = this.missedBlocks[missedIndex];
         const block: AxiosResponse<GetBlockResponseV1> = await this.apiClient.getBlockV1(
           {
-          channelName: this.ledgerChannelName,
-          gatewayOptions: this.gatewayOptions,
-          query: {
-            blockNumber,
-          },
+            channelName: this.ledgerChannelName,
+            gatewayOptions: this.gatewayOptions,
+            query: {
+              blockNumber,
+            },
           },
         );
 
-        let tempBlockParse: GetBlockResponseV1 = JSON.parse(
-          JSON.stringify(block.data),
-        );
         if (block.status == 200) {
           // Put scrapped block into database
-
           const migrateBlock = await this.migrateBlockNrWithTransactions(
             blockNumber,
           );
@@ -792,7 +784,7 @@ If some blocks above this number are already in database they will not be remove
           this.howManyBlocksMissing = this.howManyBlocksMissing - 1;
         }
 
-                if (this.howManyBlocksMissing <= 0) {
+        if (this.howManyBlocksMissing <= 0) {
           moreBlocks = false;
         }
       } while (moreBlocks);
@@ -805,12 +797,9 @@ If some blocks above this number are already in database they will not be remove
    * tries to migrate next block according to lastBlock information stored in plugin
    */
   public async migrateNextBlock(): Promise<number> {
-
     const toMigrate: number = this.lastBlock + 1;
     try {
-      const block = await this.migrateBlockNrWithTransactions(
-        toMigrate.toString(),
-      );
+      await this.migrateBlockNrWithTransactions(toMigrate.toString());
       this.lastSeenBlock = toMigrate;
       return toMigrate;
     } catch (error: unknown) {

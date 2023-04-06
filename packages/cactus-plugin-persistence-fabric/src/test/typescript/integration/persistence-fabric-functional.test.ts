@@ -731,21 +731,25 @@ describe("Persistence Fabric", () => {
   });
 
   test("get latest block in ledger from within persistence plugin", async () => {
-    const lastBlockInPlugin = await persistence.lastBlockInLedger(signingCredential);
-    log.info("latest block in ledger collected from within plugin: ", lastBlockInPlugin);
+    const lastBlockInPlugin = await persistence.lastBlockInLedger(
+      signingCredential,
+    );
+    log.info(
+      "latest block in ledger collected from within plugin: ",
+      lastBlockInPlugin,
+    );
 
     expect(lastBlockInPlugin).toBeTruthy();
-
   });
   // Those are other test scenarios when we check not missing block but normal synchro
- // test("continueBlocksSynchronization", async () => {
+  // test("continueBlocksSynchronization", async () => {
   //  const continuousBlocksSynchronization = await persistence.continueBlocksSynchronization(signingCredential);
   //  expect(continuousBlocksSynchronization).toEqual("done");
   //});
 
   // this test will finish with timout only
   //test("continuousBlocksSynchronization", async () => {
-   // const continuousBlocksSynchronization = await persistence.continuousBlocksSynchronization(signingCredential);
+  // const continuousBlocksSynchronization = await persistence.continuousBlocksSynchronization(signingCredential);
   //  expect(continuousBlocksSynchronization).toEqual("stopped");
   //});
 
