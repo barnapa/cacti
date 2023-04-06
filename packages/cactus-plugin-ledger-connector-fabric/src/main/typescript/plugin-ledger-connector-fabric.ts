@@ -951,8 +951,10 @@ export class PluginLedgerConnectorFabric
   protected async createGateway(req: RunTransactionRequest): Promise<Gateway> {
     if (req.gatewayOptions) {
       return this.createGatewayWithOptions(req.gatewayOptions);
-    } else {
+    } else if (req.signingCredential) {
       return this.createGatewayLegacy(req.signingCredential);
+    } else {
+      throw new Error("Missing either gatewayOptions or signingCredential");
     }
   }
 
@@ -1087,6 +1089,7 @@ export class PluginLedgerConnectorFabric
       params,
       transientData,
       endorsingParties,
+      responseType: responseType,
     } = req;
 
     try {
@@ -1182,9 +1185,18 @@ export class PluginLedgerConnectorFabric
           throw new Error(`${fnTag} unknown ${message}`);
         }
       }
-      const outUtf8 = out.toString("utf-8");
+      let outResp = "";
+
+      switch (responseType) {
+        case "JSONstring":
+          outResp = JSON.stringify(out);
+          break;
+        default:
+          outResp = out.toString("utf-8");
+      }
+
       const res: RunTransactionResponse = {
-        functionOutput: outUtf8,
+        functionOutput: outResp,
         success,
         transactionId: transactionId,
       };

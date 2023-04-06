@@ -3574,12 +3574,34 @@
     secp256k1 "4.0.2"
     sha3 "2.1.4"
 
+"@hyperledger/cactus-common@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@hyperledger/cactus-common/-/cactus-common-1.1.3.tgz#ed1cb7142669c649a096c2e599c7ddda59f4ec92"
+  integrity sha512-KUZzcp8yaoCXvENBaMQqQMKz8OuHY8QvxHfqmqmD62Y+J5j8lI9kOFrIdGVKPQMKAWnhXxk4RD8pRuoF78kayQ==
+  dependencies:
+    fast-safe-stringify "2.1.1"
+    json-stable-stringify "1.0.1"
+    key-encoder "2.0.3"
+    loglevel "1.7.1"
+    loglevel-plugin-prefix "0.8.4"
+    sanitize-html "2.7.0"
+    secp256k1 "4.0.2"
+    sha3 "2.1.4"
+
 "@hyperledger/cactus-core-api@1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@hyperledger/cactus-core-api/-/cactus-core-api-1.1.2.tgz#192728843d060e44d8db50ecf5c6f550e44ea6ba"
   integrity sha512-6m7EoZ6jXwf13iSgdOTcUlEOQu7j/WrRFEkAg/Ci4EokHOx0WGUlw4UwT1I97lCBaf+BaLgmsUyjk2HSB04XOg==
   dependencies:
     "@hyperledger/cactus-common" "1.1.2"
+    axios "0.21.4"
+
+"@hyperledger/cactus-core-api@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@hyperledger/cactus-core-api/-/cactus-core-api-1.1.3.tgz#dac743e9b7a9ee5f3d142d1aaea9a00c463e3e39"
+  integrity sha512-vXnjOeVFyCfbBKJ3F1Y8GMxKp9dMtCybxJ7CFnOgYMtVINfIrOAtNmVO9Zl5lp+bURTHp75b6RX/EZv14PLkow==
+  dependencies:
+    "@hyperledger/cactus-common" "1.1.3"
     axios "0.21.4"
 
 "@hyperledger/cactus-core@1.1.2":
@@ -3589,6 +3611,18 @@
   dependencies:
     "@hyperledger/cactus-common" "1.1.2"
     "@hyperledger/cactus-core-api" "1.1.2"
+    express "4.17.1"
+    express-jwt-authz "2.4.1"
+    express-openapi-validator "4.12.12"
+    typescript-optional "2.0.1"
+
+"@hyperledger/cactus-core@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@hyperledger/cactus-core/-/cactus-core-1.1.3.tgz#94bbee6c8e466639e2c351c40c5f0c8a395812a4"
+  integrity sha512-kibNUqabr/1yaqOQpSCMDLaIsfURpsnh3pevxPDJG/1AmTigQ5v3iVGihLOXskvooQp31N8hW0ce0kKpN6IyIA==
+  dependencies:
+    "@hyperledger/cactus-common" "1.1.3"
+    "@hyperledger/cactus-core-api" "1.1.3"
     express "4.17.1"
     express-jwt-authz "2.4.1"
     express-openapi-validator "4.12.12"
@@ -8910,7 +8944,7 @@ colorette@1.1.0:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.1.0.tgz#1f943e5a357fac10b4e0f5aaef3b14cdc1af6ec7"
   integrity sha512-6S062WDQUXi6hOfkO/sBPVwE5ASXY4G2+b4atvhJfSsuUUhIaUKlkjLe9692Ipyt5/a+IPF5aVTu3V5gvXq5cg==
 
-colorette@2.0.19, colorette@^2.0.10, colorette@^2.0.16:
+colorette@2.0.19:
   version "2.0.19"
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.19.tgz#cdf044f47ad41a0f4b56b3a0d5b4e6e1a2d5a798"
   integrity sha512-3tlv/dIP7FWvj3BsbHrGLJ6l/oKh1O3TcgBqMn+yyCagOxc23fyzDS6HypQbgxWbkpDnf52p1LuR4eWDQ/K9WQ==
@@ -8919,6 +8953,11 @@ colorette@^1.2.1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.4.0.tgz#5190fbb87276259a86ad700bff2c6d6faa3fca40"
   integrity sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==
+
+colorette@^2.0.10, colorette@^2.0.16:
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.16.tgz#713b9af84fdb000139f04546bd4a93f62a5085da"
+  integrity sha512-hUewv7oMjCp+wkBv5Rm0v87eJhq4woh5rSR+42YSQJKecCqgIqNkZ6lAlQms/BwHPJA5NKMRlpxPRv0n8HQW6g==
 
 colors@1.0.x:
   version "1.0.3"
@@ -17750,9 +17789,9 @@ minimist-options@4.1.0:
     kind-of "^6.0.3"
 
 minimist@>=1.2.6, minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5:
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
-  integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
+  integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
 
 minipass-collect@^1.0.2:
   version "1.0.2"
@@ -19689,14 +19728,14 @@ pg-int8@1.0.1:
   integrity sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==
 
 pg-pool@^3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-3.5.2.tgz#ed1bed1fb8d79f1c6fd5fb1c99e990fbf9ddf178"
-  integrity sha512-His3Fh17Z4eg7oANLob6ZvH8xIVen3phEZh2QuyrIl4dQSDVEabNducv6ysROKpDNPSD+12tONZVWfSgMvDD9w==
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-3.6.0.tgz#3190df3e4747a0d23e5e9e8045bcd99bda0a712e"
+  integrity sha512-clFRf2ksqd+F497kWFyM21tMjeikn60oGDmqMT8UBrynEwVEX/5R5xd2sdvdo1cZCFlguORNpVuqxIj+aK4cfQ==
 
 pg-protocol@*, pg-protocol@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/pg-protocol/-/pg-protocol-1.5.0.tgz#b5dd452257314565e2d54ab3c132adc46565a6a0"
-  integrity sha512-muRttij7H8TqRNu/DxrAJQITO4Ac7RmX3Klyr/9mJEOBeIpgnF8f9jAfRz5d3XwQZl5qBjF9gLsUtMPJE0vezQ==
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/pg-protocol/-/pg-protocol-1.6.0.tgz#4c91613c0315349363af2084608db843502f8833"
+  integrity sha512-M+PDm637OY5WM307051+bsDia5Xej6d9IR4GwJse1qA1DIhiKlksvrneZOYQq42OM+spubpcNYEo2FcKQrDk+Q==
 
 pg-types@^2.1.0, pg-types@^2.2.0:
   version "2.2.0"
@@ -21950,14 +21989,14 @@ semver@7.3.5:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.3.7:
+semver@7.3.7, semver@^7.3.7:
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
   integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.x, semver@^7.0.0, semver@^7.1.1, semver@^7.2.1, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8:
+semver@7.x, semver@^7.0.0, semver@^7.1.1, semver@^7.2.1, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
   integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
@@ -24093,9 +24132,9 @@ tslib@^1.10.0, tslib@^1.13.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
 tslib@^2.4.0:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
-  integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.5.0.tgz#42bfed86f5787aeb41d031866c8f402429e0fddf"
+  integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
 
 tslib@~2.1.0:
   version "2.1.0"
