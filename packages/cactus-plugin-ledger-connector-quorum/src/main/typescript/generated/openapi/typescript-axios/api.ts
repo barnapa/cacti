@@ -165,6 +165,15 @@ export interface DeployContractSolidityBytecodeV1Request {
      * @memberof DeployContractSolidityBytecodeV1Request
      */
     'contractName': string;
+<<<<<<< HEAD
+    /**
+     * The application binary interface of the solidity contract
+     * @type {Array<any>}
+     * @memberof DeployContractSolidityBytecodeV1Request
+     */
+    'contractAbi'?: Array<any>;
+=======
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * The application binary interface of the solidity contract
      * @type {Array<any>}
@@ -172,29 +181,26 @@ export interface DeployContractSolidityBytecodeV1Request {
      */
     'contractAbi'?: Array<any>;
     /**
-     * The application binary interface of the solidity contract
-     * @type {Array<any>}
-     * @memberof DeployContractSolidityBytecodeV1Request
-     */
-    contractAbi?: Array<any>;
-    /**
      * 
      * @type {Web3SigningCredential}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
     'web3SigningCredential': Web3SigningCredential;
+<<<<<<< HEAD
     /**
      * See https://ethereum.stackexchange.com/a/47556 regarding the maximum length of the bytecode
      * @type {string}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
     'bytecode'?: string;
+=======
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * See https://ethereum.stackexchange.com/a/47556 regarding the maximum length of the bytecode
      * @type {string}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
-    bytecode?: string;
+    'bytecode'?: string;
     /**
      * The keychainId for retrieve the contracts json.
      * @type {string}
@@ -213,30 +219,42 @@ export interface DeployContractSolidityBytecodeV1Request {
      * @memberof DeployContractSolidityBytecodeV1Request
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'gasPrice'?: number;
 =======
     gasPrice?: number;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'gasPrice'?: number;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {number}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
+<<<<<<< HEAD
 <<<<<<< HEAD
     'nonce'?: number;
 =======
     nonce?: number;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'nonce'?: number;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {number}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'value'?: number;
 =======
     value?: number;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'value'?: number;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * The amount of milliseconds to wait for a transaction receipt with theaddress of the contract(which indicates successful deployment) beforegiving up and crashing.
      * @type {number}
@@ -255,20 +273,28 @@ export interface DeployContractSolidityBytecodeV1Request {
      * @memberof DeployContractSolidityBytecodeV1Request
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'constructorArgs'?: Array<any>;
 =======
     constructorArgs?: Array<any>;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'constructorArgs'?: Array<any>;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {QuorumPrivateTransactionConfig}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'privateTransactionConfig'?: QuorumPrivateTransactionConfig;
 =======
     privateTransactionConfig?: QuorumPrivateTransactionConfig;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'privateTransactionConfig'?: QuorumPrivateTransactionConfig;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
 }
 /**
  * 
@@ -385,20 +411,28 @@ export interface InvokeContractJsonObjectV1Request {
      * @memberof InvokeContractJsonObjectV1Request
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'contractJSON': ContractJSON;
 =======
     contractJSON: ContractJSON;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'contractJSON': ContractJSON;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {QuorumPrivateTransactionConfig}
      * @memberof InvokeContractJsonObjectV1Request
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'privateTransactionConfig'?: QuorumPrivateTransactionConfig;
 =======
     privateTransactionConfig?: QuorumPrivateTransactionConfig;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'privateTransactionConfig'?: QuorumPrivateTransactionConfig;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
 }
 
 
@@ -615,6 +649,7 @@ export interface InvokeRawWeb3EthMethodV1Response {
      * @memberof InvokeRawWeb3EthMethodV1Response
      */
     'errorDetail'?: string;
+<<<<<<< HEAD
 }
 /**
  * 
@@ -664,6 +699,8 @@ export interface QuorumPrivateTransactionConfig {
      * @memberof QuorumPrivateTransactionConfig
      */
     'privacyGroupId'?: string;
+=======
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
 }
 /**
  * 
@@ -676,43 +713,43 @@ export interface QuorumPrivateTransactionConfig {
      * @type {string}
      * @memberof QuorumPrivateTransactionConfig
      */
-    privateFrom?: string;
+    'privateFrom'?: string;
     /**
      * 
      * @type {Array<any>}
      * @memberof QuorumPrivateTransactionConfig
      */
-    privateFor: Array<any>;
+    'privateFor': Array<any>;
     /**
      * 
      * @type {boolean}
      * @memberof QuorumPrivateTransactionConfig
      */
-    isPrivate?: boolean;
+    'isPrivate'?: boolean;
     /**
      * 
      * @type {number}
      * @memberof QuorumPrivateTransactionConfig
      */
-    gasPrice?: number;
+    'gasPrice'?: number;
     /**
      * 
      * @type {number}
      * @memberof QuorumPrivateTransactionConfig
      */
-    gasLimit?: number;
+    'gasLimit'?: number;
     /**
      * 
      * @type {string}
      * @memberof QuorumPrivateTransactionConfig
      */
-    privateKey?: string;
+    'privateKey'?: string;
     /**
      * 
      * @type {string}
      * @memberof QuorumPrivateTransactionConfig
      */
-    privacyGroupId?: string;
+    'privacyGroupId'?: string;
 }
 /**
  * 
@@ -807,20 +844,28 @@ export interface RunTransactionRequest {
      * @memberof RunTransactionRequest
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'timeoutMs'?: number;
 =======
     timeoutMs?: number;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'timeoutMs'?: number;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {QuorumPrivateTransactionConfig}
      * @memberof RunTransactionRequest
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'privateTransactionConfig'?: QuorumPrivateTransactionConfig;
 =======
     privateTransactionConfig?: QuorumPrivateTransactionConfig;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'privateTransactionConfig'?: QuorumPrivateTransactionConfig;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
 }
 /**
  * 
@@ -1523,70 +1568,98 @@ export interface Web3TransactionReceipt {
      * @memberof Web3TransactionReceipt
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'to': string;
 =======
     to: string;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'to': string;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {Array<any>}
      * @memberof Web3TransactionReceipt
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'logs'?: Array<any>;
 =======
     logs?: Array<any>;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'logs'?: Array<any>;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {string}
      * @memberof Web3TransactionReceipt
      */
+<<<<<<< HEAD
 <<<<<<< HEAD
     'logsBloom'?: string;
 =======
     logsBloom?: string;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'logsBloom'?: string;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {string}
      * @memberof Web3TransactionReceipt
      */
+<<<<<<< HEAD
 <<<<<<< HEAD
     'revertReason'?: string;
 =======
     revertReason?: string;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'revertReason'?: string;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {string}
      * @memberof Web3TransactionReceipt
      */
+<<<<<<< HEAD
 <<<<<<< HEAD
     'output'?: string;
 =======
     output?: string;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'output'?: string;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {string}
      * @memberof Web3TransactionReceipt
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'commitmentHash'?: string;
 =======
     commitmentHash?: string;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'commitmentHash'?: string;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
     /**
      * 
      * @type {number}
      * @memberof Web3TransactionReceipt
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     'cumulativeGasUSed'?: number;
 =======
     cumulativeGasUSed?: number;
 >>>>>>> fe15a9e6 (feat(quorum): private transaction support)
+=======
+    'cumulativeGasUSed'?: number;
+>>>>>>> aadb00bc (feat(openapi): upgrade to 6.3.0 phase1)
 }
 
 /**
