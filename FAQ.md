@@ -219,14 +219,15 @@ sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+setting proper permissions	 	 	
+usermod -aG docker *HereTypeYoursUserName*
+	 	 	 	
+usermod -aG docker root
 test  installation: 
 sudo docker run hello-world
 
 	 
-setting proper permissions	 	 	
-usermod -aG docker ubuntu150
-	 	 	 	
-usermod -aG docker root
+
 
 
 "retest list of container using " :
@@ -239,10 +240,10 @@ III ) NVM
     nvm install 16.18.1
     nvm install 14
     nvm alias default 16
-nvm use 16.18.1
- npm install -g npm@7.19.1
+    nvm use 16.18.1
+    npm install -g npm@7.19.1
 
- npm install -g npm@7.19.1
+    npm install -g npm@7.19.1
 
 IV ) splint 
 
