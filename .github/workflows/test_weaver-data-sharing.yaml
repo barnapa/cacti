@@ -31,7 +31,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.5.2
 
       - name: Set up JDK 8
         uses: actions/setup-java@v3.11.0
@@ -55,12 +55,12 @@ jobs:
           echo "Using ${GITHUB_ACTOR} user."
           echo "username=${GITHUB_ACTOR}" >> github.properties
           echo "password=${{ secrets.GITHUB_TOKEN }}" >> github.properties
-          echo "url=https://maven.pkg.github.com/${GITHUB_ACTOR}/weaver-dlt-interoperability" >> github.properties
+          echo "url=https://maven.pkg.github.com/${GITHUB_ACTOR}/cacti" >> github.properties
 
           echo "Using ${GITHUB_ACTOR} user."
           echo "username=${GITHUB_ACTOR}" >> github.main.properties
           echo "password=${{ secrets.GITHUB_TOKEN }}" >> github.main.properties
-          echo "url=https://maven.pkg.github.com/hyperledger-labs/weaver-dlt-interoperability" >> github.main.properties
+          echo "url=https://maven.pkg.github.com/hyperledger/cacti" >> github.main.properties
 
           ./scripts/get-cordapps.sh || mv github.main.properties github.properties
 
@@ -337,6 +337,46 @@ jobs:
               exit 1
           fi
         working-directory: weaver/samples/fabric/fabric-cli
+        
+      - name: DEBUG Logs - corda partya
+        if: failure()
+        run: docker logs corda_partya_1
+        
+      - name: DEBUG Logs - corda network2 partya
+        if: failure()
+        run: docker logs corda_network2_partya_1
+        
+      - name: DEBUG Logs - fabric n1 relay
+        if: failure()
+        run: docker logs relay-network1
+        
+      - name: DEBUG Logs - fabric n2 relay
+        if: failure()
+        run: docker logs relay-network2
+        
+      - name: DEBUG Logs - corda relay
+        if: failure()
+        run: docker logs relay-corda
+        
+      - name: DEBUG Logs - corda2 relay
+        if: failure()
+        run: docker logs relay-corda2
+        
+      - name: DEBUG Logs - fabric n1 driver
+        if: failure()
+        run: docker logs driver-fabric-network1
+        
+      - name: DEBUG Logs - fabric n2 driver
+        if: failure()
+        run: docker logs driver-fabric-network2
+        
+      - name: DEBUG Logs - corda driver
+        if: failure()
+        run: docker logs driver-corda-Corda_Network
+        
+      - name: DEBUG Logs - corda2 driver
+        if: failure()
+        run: docker logs driver-corda-Corda_Network2
 
   data-sharing-docker-local:
     # if: ${{ false }}
@@ -346,7 +386,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.5.2
 
       - name: Set up JDK 8
         uses: actions/setup-java@v3.11.0
@@ -450,34 +490,34 @@ jobs:
 
       - name: Start Relay for network1
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-relay-server#g" docker/testnet-envs/.env.n1
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-relay-server#g" docker/testnet-envs/.env.n1
           make start-server COMPOSE_ARG='--env-file docker/testnet-envs/.env.n1'
         working-directory: weaver/core/relay
 
       - name: Start Relay for network2
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-relay-server#g" docker/testnet-envs/.env.n2
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-relay-server#g" docker/testnet-envs/.env.n2
           make start-server COMPOSE_ARG='--env-file docker/testnet-envs/.env.n2'
         working-directory: weaver/core/relay
 
       - name: Start Relay for Corda_Network
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-relay-server#g" docker/testnet-envs/.env.corda
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-relay-server#g" docker/testnet-envs/.env.corda
           make start-server COMPOSE_ARG='--env-file docker/testnet-envs/.env.corda'
         working-directory: weaver/core/relay
 
       - name: Start Relay for Corda_Network2
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-relay-server#g" docker/testnet-envs/.env.corda2
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-relay-server#g" docker/testnet-envs/.env.corda2
           make start-server COMPOSE_ARG='--env-file docker/testnet-envs/.env.corda2'
         working-directory: weaver/core/relay
 
       # FABRIC DRIVER
       - name: Setup Fabric Driver .env
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-fabric-driver#g" docker-testnet-envs/.env.n1
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-driver-fabric#g" docker-testnet-envs/.env.n1
           sed -i "s#<PATH-TO-WEAVER>#${GITHUB_WORKSPACE}/weaver#g" docker-testnet-envs/.env.n1
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-fabric-driver#g" docker-testnet-envs/.env.n2
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-driver-fabric#g" docker-testnet-envs/.env.n2
           sed -i "s#<PATH-TO-WEAVER>#${GITHUB_WORKSPACE}/weaver#g" docker-testnet-envs/.env.n2
         working-directory: weaver/core/drivers/fabric-driver
 
@@ -492,19 +532,19 @@ jobs:
       # IIN AGENT
       - name: Setup Fabric IIN Env
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-iin-agent#g" docker-testnet/envs/.env.n1.org1
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-iin-agent#g" docker-testnet/envs/.env.n1.org1
           sed -i "s#<PATH-TO-WEAVER>#${GITHUB_WORKSPACE}/weaver#g" docker-testnet/envs/.env.n1.org1
           sed -i "s#^AUTO_SYNC=true#AUTO_SYNC=false#g" docker-testnet/envs/.env.n1.org1
           sed -i "s#^DNS_CONFIG_PATH=.*#DNS_CONFIG_PATH=./docker-testnet/configs/dnsconfig-2-nodes.json#g" docker-testnet/envs/.env.n1.org1
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-iin-agent#g" docker-testnet/envs/.env.n1.org2
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-iin-agent#g" docker-testnet/envs/.env.n1.org2
           sed -i "s#<PATH-TO-WEAVER>#${GITHUB_WORKSPACE}/weaver#g" docker-testnet/envs/.env.n1.org2
           sed -i "s#^AUTO_SYNC=true#AUTO_SYNC=false#g" docker-testnet/envs/.env.n1.org2
           sed -i "s#^DNS_CONFIG_PATH=.*#DNS_CONFIG_PATH=./docker-testnet/configs/dnsconfig-2-nodes.json#g" docker-testnet/envs/.env.n1.org2
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-iin-agent#g" docker-testnet/envs/.env.n2.org1
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-iin-agent#g" docker-testnet/envs/.env.n2.org1
           sed -i "s#<PATH-TO-WEAVER>#${GITHUB_WORKSPACE}/weaver#g" docker-testnet/envs/.env.n2.org1
           sed -i "s#^AUTO_SYNC=true#AUTO_SYNC=false#g" docker-testnet/envs/.env.n2.org1
           sed -i "s#^DNS_CONFIG_PATH=.*#DNS_CONFIG_PATH=./docker-testnet/configs/dnsconfig-2-nodes.json#g" docker-testnet/envs/.env.n2.org1
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-iin-agent#g" docker-testnet/envs/.env.n2.org2
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-iin-agent#g" docker-testnet/envs/.env.n2.org2
           sed -i "s#<PATH-TO-WEAVER>#${GITHUB_WORKSPACE}/weaver#g" docker-testnet/envs/.env.n2.org2
           sed -i "s#^AUTO_SYNC=true#AUTO_SYNC=false#g" docker-testnet/envs/.env.n2.org2
           sed -i "s#^DNS_CONFIG_PATH=.*#DNS_CONFIG_PATH=./docker-testnet/configs/dnsconfig-2-nodes.json#g" docker-testnet/envs/.env.n2.org2
@@ -525,13 +565,13 @@ jobs:
       # CORDA DRIVER
       - name: Start Corda Driver
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-corda-driver#g" docker-testnet-envs/.env.corda
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-driver-corda#g" docker-testnet-envs/.env.corda
           make deploy COMPOSE_ARG='--env-file docker-testnet-envs/.env.corda'
         working-directory: weaver/core/drivers/corda-driver
 
       - name: Start Corda_Network2 Driver
         run: |
-          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=weaver-corda-driver#g" docker-testnet-envs/.env.corda2
+          sed -i "s#^DOCKER_IMAGE_NAME=.*#DOCKER_IMAGE_NAME=cacti-weaver-driver-corda#g" docker-testnet-envs/.env.corda2
           make deploy COMPOSE_ARG='--env-file docker-testnet-envs/.env.corda2'
         working-directory: weaver/core/drivers/corda-driver
 
@@ -703,6 +743,46 @@ jobs:
               exit 1
           fi
         working-directory: weaver/samples/fabric/fabric-cli
+        
+      - name: DEBUG Logs - corda partya
+        if: failure()
+        run: docker logs corda_partya_1
+        
+      - name: DEBUG Logs - corda network2 partya
+        if: failure()
+        run: docker logs corda_network2_partya_1
+        
+      - name: DEBUG Logs - fabric n1 relay
+        if: failure()
+        run: docker logs relay-network1
+        
+      - name: DEBUG Logs - fabric n2 relay
+        if: failure()
+        run: docker logs relay-network2
+        
+      - name: DEBUG Logs - corda relay
+        if: failure()
+        run: docker logs relay-corda
+        
+      - name: DEBUG Logs - corda2 relay
+        if: failure()
+        run: docker logs relay-corda2
+        
+      - name: DEBUG Logs - fabric n1 driver
+        if: failure()
+        run: docker logs driver-fabric-network1
+        
+      - name: DEBUG Logs - fabric n2 driver
+        if: failure()
+        run: docker logs driver-fabric-network2
+        
+      - name: DEBUG Logs - corda driver
+        if: failure()
+        run: docker logs driver-corda-Corda_Network
+        
+      - name: DEBUG Logs - corda2 driver
+        if: failure()
+        run: docker logs driver-corda-Corda_Network2
 
   data-sharing-local:
     # if: ${{ false }}
@@ -712,7 +792,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.5.2
 
       - name: Set up JDK 8
         uses: actions/setup-java@v3.11.0
@@ -899,11 +979,11 @@ jobs:
 
       # CORDA DRIVER
       - name: Start Corda_Network Driver
-        run: ./build/install/corda-driver/bin/corda-driver &> corda-driver.out &
+        run: ./build/install/driver-corda/bin/driver-corda &> corda-driver.out &
         working-directory: weaver/core/drivers/corda-driver
 
       - name: Start Corda_Network2 Driver
-        run: DRIVER_PORT=9098 ./build/install/corda-driver/bin/corda-driver &> corda2-driver.out &
+        run: DRIVER_PORT=9098 ./build/install/driver-corda/bin/driver-corda &> corda2-driver.out &
         working-directory: weaver/core/drivers/corda-driver
 
       # FABRIC CLI
@@ -1073,3 +1153,43 @@ jobs:
               exit 1
           fi
         working-directory: weaver/samples/fabric/fabric-cli
+        
+      - name: DEBUG Logs - corda partya
+        if: failure()
+        run: docker logs corda_partya_1
+        
+      - name: DEBUG Logs - corda network2 partya
+        if: failure()
+        run: docker logs corda_network2_partya_1
+        
+      - name: DEBUG Logs - fabric n1 relay
+        if: failure()
+        run: cat weaver/core/relay/relay-n1.out
+        
+      - name: DEBUG Logs - fabric n2 relay
+        if: failure()
+        run: cat weaver/core/relay/relay-n2.out
+        
+      - name: DEBUG Logs - corda relay
+        if: failure()
+        run: cat weaver/core/relay/relay-corda.out
+        
+      - name: DEBUG Logs - corda2 relay
+        if: failure()
+        run: cat weaver/core/relay/relay-corda2.out
+        
+      - name: DEBUG Logs - fabric n1 driver
+        if: failure()
+        run: cat weaver/core/drivers/fabric-driver/fdriver-n1.out
+        
+      - name: DEBUG Logs - fabric n2 driver
+        if: failure()
+        run: cat weaver/core/drivers/fabric-driver/fdriver-n2.out
+        
+      - name: DEBUG Logs - corda driver
+        if: failure()
+        run: cat weaver/core/drivers/corda-driver/corda-driver.out
+        
+      - name: DEBUG Logs - corda2 driver
+        if: failure()
+        run: cat weaver/core/drivers/corda-driver/corda2-driver.out

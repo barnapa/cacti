@@ -10,23 +10,24 @@
 /** End file docs */
 import fs from "fs";
 import * as grpcJs from "@grpc/grpc-js";
-import networksGrpcPb from "@hyperledger-labs/weaver-protos-js/networks/networks_grpc_pb";
-import networksPb from "@hyperledger-labs/weaver-protos-js/networks/networks_pb";
-import common_ack_pb from "@hyperledger-labs/weaver-protos-js/common/ack_pb";
-import eventsPb from "@hyperledger-labs/weaver-protos-js/common/events_pb";
-import statePb from "@hyperledger-labs/weaver-protos-js/common/state_pb";
+import networksGrpcPb from "@hyperledger/cacti-weaver-protos-js/networks/networks_grpc_pb";
+import networksPb from "@hyperledger/cacti-weaver-protos-js/networks/networks_pb";
+import common_ack_pb from "@hyperledger/cacti-weaver-protos-js/common/ack_pb";
+import eventsPb from "@hyperledger/cacti-weaver-protos-js/common/events_pb";
+import statePb from "@hyperledger/cacti-weaver-protos-js/common/state_pb";
 import * as helpers from "./helpers";
 /**
  * The Relay class represents a relay in the target blockchain network.
  */
 class Relay {
-    static defaultTimeout = 3000;
+    static defaultTimeout = 30000;
+    static defaultBackOffMSec = 500;
     timeoutTime = Relay.defaultTimeout;
+    backOffMSec = Relay.defaultBackOffMSec;
     _endPoint = "";
     _useTls = false;
     _tlsRootCACerts = '';
     // TODO: make this configurable parameter
-    backOffMSec = 500;
 
     /**
      * Construct a Relay object with the given url. A Relay object
@@ -36,11 +37,12 @@ class Relay {
      * @param {string} url - The URL with format of "http(s)://host:port".
      * @returns {Relay} The Relay instance.
      */
-    constructor(endPoint: string, timeoutTime = 30000, useTls = false, tlsRootCACertPaths?: Array<string>) {
+    constructor(endPoint: string, useTls = false, tlsRootCACertPaths?: Array<string>, timeoutTime = 30000, backOffMSec = 500) {
         if (!endPoint) {
             throw new Error("Invalid Arguments");
         }
         this.timeoutTime = timeoutTime;
+        this.backOffMSec = backOffMSec;
         // eslint-disable-next-line
         this._endPoint = endPoint;
         this._useTls = useTls;

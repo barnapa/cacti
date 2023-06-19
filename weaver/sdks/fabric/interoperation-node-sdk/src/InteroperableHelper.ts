@@ -20,13 +20,13 @@ import crypto from "crypto";
 import eciesCrypto from "./eciesCrypto.js";
 import * as helpers from "./helpers";
 import { deserializeRemoteProposalResponseBase64, serializeRemoteProposalResponse } from "./decoders";
-import statePb from "@hyperledger-labs/weaver-protos-js/common/state_pb";
-import fabricViewPb from "@hyperledger-labs/weaver-protos-js/fabric/view_data_pb";
-import cordaViewPb from "@hyperledger-labs/weaver-protos-js/corda/view_data_pb";
-import interopPayloadPb from "@hyperledger-labs/weaver-protos-js/common/interop_payload_pb";
-import proposalPb from "@hyperledger-labs/weaver-protos-js/peer/proposal_pb";
-import proposalResponsePb from "@hyperledger-labs/weaver-protos-js/peer/proposal_response_pb";
-import identitiesPb from "@hyperledger-labs/weaver-protos-js/msp/identities_pb";
+import statePb from "@hyperledger/cacti-weaver-protos-js/common/state_pb";
+import fabricViewPb from "@hyperledger/cacti-weaver-protos-js/fabric/view_data_pb";
+import cordaViewPb from "@hyperledger/cacti-weaver-protos-js/corda/view_data_pb";
+import interopPayloadPb from "@hyperledger/cacti-weaver-protos-js/common/interop_payload_pb";
+import proposalPb from "@hyperledger/cacti-weaver-protos-js/peer/proposal_pb";
+import proposalResponsePb from "@hyperledger/cacti-weaver-protos-js/peer/proposal_response_pb";
+import identitiesPb from "@hyperledger/cacti-weaver-protos-js/msp/identities_pb";
 import { Relay } from "./Relay";
 import { Gateway, Contract } from "fabric-network";
 import { v4 as uuidv4 } from "uuid";
@@ -685,7 +685,7 @@ const getRemoteView = async (
     if (policyCriteriaError) {
         throw new Error(`InteropFlow failed to get policy criteria: ${policyCriteriaError}`);
     }
-    const relay = useTls ? new Relay(localRelayEndpoint, Relay.defaultTimeout, true, tlsRootCACertPaths) : new Relay(localRelayEndpoint);
+    const relay = useTls ? new Relay(localRelayEndpoint, true, tlsRootCACertPaths) : new Relay(localRelayEndpoint);
     const uuidValue = uuidv4();
     // Step 3
     // TODO fix types here so can return proper view

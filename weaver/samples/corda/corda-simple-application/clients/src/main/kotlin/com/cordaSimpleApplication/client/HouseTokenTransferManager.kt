@@ -24,10 +24,10 @@ import net.corda.core.messaging.startFlow
 import org.json.JSONObject
 import java.util.Base64
 import java.util.Calendar
-import org.hyperledger.cacti.weaver.corda.app.interop.states.AssetClaimStatusState
-import org.hyperledger.cacti.weaver.corda.app.interop.states.AssetPledgeState
-import org.hyperledger.cacti.weaver.corda.app.interop.flows.GetAssetPledgeStatus
-import org.hyperledger.cacti.weaver.corda.sdk.AssetTransferSDK
+import org.hyperledger.cacti.weaver.imodule.corda.states.AssetClaimStatusState
+import org.hyperledger.cacti.weaver.imodule.corda.states.AssetPledgeState
+import org.hyperledger.cacti.weaver.imodule.corda.flows.GetAssetPledgeStatus
+import org.hyperledger.cacti.weaver.sdk.corda.AssetTransferSDK
 import com.cordaSimpleApplication.contract.AssetContract
 
 import net.corda.samples.tokenizedhouse.flows.GetAssetClaimStatusByPledgeId
@@ -41,7 +41,7 @@ import com.google.gson.GsonBuilder
 import com.r3.corda.lib.tokens.contracts.commands.RedeemTokenCommand
 import com.r3.corda.lib.tokens.contracts.commands.IssueTokenCommand
 import com.r3.corda.lib.tokens.contracts.FungibleTokenContract
-import org.hyperledger.cacti.weaver.corda.app.interop.flows.RetrieveNetworkId
+import org.hyperledger.cacti.weaver.imodule.corda.flows.RetrieveNetworkId
 import net.corda.core.identity.CordaX500Name
 import net.corda.core.identity.Party
 
@@ -90,7 +90,7 @@ class PledgeHouseTokenCommand : CliktCommand(name="pledge-asset",
             try {
                 val params = param!!.split(":").toTypedArray()
                 var result: Either<Error, String>
-                val issuer = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse("O=PartyA,L=London,C=GB"))!!
+                val issuer = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(ISSUER_DN))!!
                 val issuedTokenType = rpc.proxy.startFlow(::GetIssuedTokenType, "house").returnValue.get()
                 println("TokenType: $issuedTokenType")
 
@@ -181,7 +181,7 @@ class ReclaimHouseTokenCommand : CliktCommand(name="reclaim-pledged-asset", help
                 password = "test",
                 rpcPort = config["CORDA_PORT"]!!.toInt())
             try {
-                val issuer = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse("O=PartyA,L=London,C=GB"))!!
+                val issuer = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(ISSUER_DN))!!
                 val issuedTokenType = rpc.proxy.startFlow(::GetIssuedTokenType, "house").returnValue.get()
                 println("TokenType: $issuedTokenType")
 
@@ -207,7 +207,7 @@ class ReclaimHouseTokenCommand : CliktCommand(name="reclaim-pledged-asset", help
 
                 //val networkConfig: JSONObject = getRemoteNetworkConfig(assetPledgeState.localNetworkId)
                 //val exportRelayAddress: String = networkConfig.getString("relayEndpoint")
-                val claimStatusLinearId: String = requestStateFromRemoteNetwork(exportRelayAddress!!, externalStateAddress, rpc.proxy, config)
+                val claimStatusLinearId: String = requestStateFromRemoteNetwork(exportRelayAddress!!, externalStateAddress, rpc.proxy, config, listOf(issuer))
 
                 var obs = listOf<Party>()
                 if (observer != null)   {
@@ -264,7 +264,7 @@ class ClaimRemoteHouseTokenCommand : CliktCommand(name="claim-remote-asset", hel
                 password = "test",
                 rpcPort = config["CORDA_PORT"]!!.toInt())
             try {
-                val issuer: Party = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse("O=PartyA,L=London,C=GB"))!!
+                val issuer: Party = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(ISSUER_DN))!!
                 val issuedTokenType = rpc.proxy.startFlow(::GetIssuedTokenType, "house").returnValue.get()
                 println("TokenType: $issuedTokenType")
                 val recipientCert: String = fetchCertBase64Helper(rpc.proxy)
@@ -292,7 +292,7 @@ class ClaimRemoteHouseTokenCommand : CliktCommand(name="claim-remote-asset", hel
                 //    below from the remote-network-config.json file
                 //val networkConfig: JSONObject = getRemoteNetworkConfig(importNetworkId)
                 //val importRelayAddress: String = networkConfig.getString("relayEndpoint")
-                val pledgeStatusLinearId: String = requestStateFromRemoteNetwork(importRelayAddress!!, externalStateAddress, rpc.proxy, config)
+                val pledgeStatusLinearId: String = requestStateFromRemoteNetwork(importRelayAddress!!, externalStateAddress, rpc.proxy, config, listOf(issuer))
 
                 val res = AssetTransferSDK.claimPledgedFungibleAsset(
                     rpc.proxy,
