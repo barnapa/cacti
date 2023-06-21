@@ -17,11 +17,12 @@ import java.lang.Exception
 import kotlinx.coroutines.*
 import net.corda.core.messaging.startFlow
 import java.util.*
+import net.corda.core.identity.Party
 
 import com.cordaSimpleApplication.flow.CreateState
 import com.cordaSimpleApplication.state.SimpleState
 
-import org.hyperledger.cacti.weaver.corda.sdk.InteroperableHelper
+import org.hyperledger.cacti.weaver.sdk.corda.InteroperableHelper
 
 /**
  * The CLI command used to trigger a request for state from an external network.
@@ -54,6 +55,7 @@ class RequestStateCommand : CliktCommand(help = "Requests state from a foreign n
                 localRelayAddress, 
                 externalStateAddress,
                 networkName,
+                listOf<Party>(),
                 config["RELAY_TLS"]!!.toBoolean(),
                 config["RELAY_TLSCA_TRUST_STORE"]!!,
                 config["RELAY_TLSCA_TRUST_STORE_PASSWORD"]!!,

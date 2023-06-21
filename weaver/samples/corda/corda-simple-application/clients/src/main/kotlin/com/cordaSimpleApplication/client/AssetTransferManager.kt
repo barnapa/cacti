@@ -24,14 +24,14 @@ import kotlin.system.exitProcess
 import net.corda.core.messaging.startFlow
 import java.util.Base64
 import net.corda.core.identity.CordaX500Name
-import org.hyperledger.cacti.weaver.corda.sdk.AssetTransferSDK
-import org.hyperledger.cacti.weaver.corda.sdk.InteroperableHelper
+import org.hyperledger.cacti.weaver.sdk.corda.AssetTransferSDK
+import org.hyperledger.cacti.weaver.sdk.corda.InteroperableHelper
 import com.cordaSimpleApplication.contract.AssetContract
 import com.cordaSimpleApplication.contract.BondAssetContract
 import java.util.Calendar
-import org.hyperledger.cacti.weaver.corda.app.interop.flows.RetrieveNetworkId
-import org.hyperledger.cacti.weaver.corda.app.interop.flows.GetAssetPledgeStatus
-import org.hyperledger.cacti.weaver.corda.app.interop.states.AssetPledgeState
+import org.hyperledger.cacti.weaver.imodule.corda.flows.RetrieveNetworkId
+import org.hyperledger.cacti.weaver.imodule.corda.flows.GetAssetPledgeStatus
+import org.hyperledger.cacti.weaver.imodule.corda.states.AssetPledgeState
 import com.cordaSimpleApplication.flow.GetAssetClaimStatusByPledgeId
 import com.cordaSimpleApplication.flow.GetBondAssetPledgeStatusByPledgeId
 import com.cordaSimpleApplication.flow.GetBondAssetClaimStatusByPledgeId
@@ -90,7 +90,7 @@ class PledgeAssetCommand : CliktCommand(name="pledge-asset",
                  // "thisParty" is set to the token "issuer" in case fungible house token; since we are using the same
                  // SDK function claimPledgeFungibleAsset and Interop application for both the "Simple Asset" and
                  // the "Fungible house token" corDapps, we pass the Identity of the party submitting the claim here.
-                val thisParty: Party = rpc.proxy.nodeInfo().legalIdentities.get(0)
+                val issuer: Party = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(ISSUER_DN))!!
 
                 var obs = listOf<Party>()
                 if (observer != null)   {
@@ -111,7 +111,7 @@ class PledgeAssetCommand : CliktCommand(name="pledge-asset",
                         nTimeout,
                         "com.cordaSimpleApplication.flow.RetrieveStateAndRef",
                         AssetContract.Commands.Delete(),
-                        thisParty,
+                        issuer,
                         obs
                     )
                 } else {
@@ -125,7 +125,7 @@ class PledgeAssetCommand : CliktCommand(name="pledge-asset",
                         nTimeout,
                         "com.cordaSimpleApplication.flow.RetrieveBondAssetStateAndRef",
                         BondAssetContract.Commands.Delete(),
-                        thisParty,
+                        issuer,
                         obs
                     )
                 }
@@ -241,6 +241,7 @@ class ReclaimAssetCommand : CliktCommand(name="reclaim-pledged-asset", help = "R
             // SDK function claimPledgeFungibleAsset and Interop application for both the "Simple Asset" and
             // the "Fungible house token" corDapps, we pass the Identity of the party submitting the claim here.
             val thisParty: Party = rpc.proxy.nodeInfo().legalIdentities.get(0)
+            val issuer: Party = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(ISSUER_DN))!!
 
             val params = param!!.split(":").toTypedArray()
             if (params.size != 2) {
@@ -266,7 +267,7 @@ class ReclaimAssetCommand : CliktCommand(name="reclaim-pledged-asset", help = "R
 
                 //val networkConfig: JSONObject = getRemoteNetworkConfig(assetPledgeState.localNetworkId)
                 //val exportRelayAddress: String = networkConfig.getString("relayEndpoint")
-                val claimStatusLinearId: String = requestStateFromRemoteNetwork(exportRelayAddress!!, externalStateAddress, rpc.proxy, config)
+                val claimStatusLinearId: String = requestStateFromRemoteNetwork(exportRelayAddress!!, externalStateAddress, rpc.proxy, config, listOf(issuer))
 
                 var obs = listOf<Party>()
                 if (observer != null)   {
@@ -344,6 +345,7 @@ class ClaimRemoteAssetCommand : CliktCommand(name="claim-remote-asset", help = "
                 // SDK function claimPledgeFungibleAsset and Interop application for both the "Simple Asset" and
                 // the "Fungible house token" corDapps, we pass the Identity of the party submitting the claim here.
                 val thisParty: Party = rpc.proxy.nodeInfo().legalIdentities.get(0)
+                val issuer: Party = rpc.proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(ISSUER_DN))!!
                 val recipientCert: String = fetchCertBase64Helper(rpc.proxy)
                 val params = param!!.split(":").toTypedArray()
                 if (params.size != 2) {
@@ -368,7 +370,7 @@ class ClaimRemoteAssetCommand : CliktCommand(name="claim-remote-asset", help = "
                 //    below from the remote-network-config.json file
                 //val networkConfig: JSONObject = getRemoteNetworkConfig(importNetworkId)
                 //val importRelayAddress: String = networkConfig.getString("relayEndpoint")
-                val pledgeStatusLinearId: String = requestStateFromRemoteNetwork(importRelayAddress!!, externalStateAddress, rpc.proxy, config)
+                val pledgeStatusLinearId: String = requestStateFromRemoteNetwork(importRelayAddress!!, externalStateAddress, rpc.proxy, config, listOf(issuer))
 
                 var res: Any
                 if (transferCategory!!.contains("token.")) {
@@ -604,7 +606,8 @@ fun requestStateFromRemoteNetwork(
     localRelayAddress: String,
     externalStateAddress: String,
     proxy: CordaRPCOps,
-    config: Map<String, String>) : String
+    config: Map<String, String>,
+    externalStateParticipants: List<Party>) : String
 {
     var linearId: String = ""
     val networkName = System.getenv("NETWORK_NAME") ?: "Corda_Network"
@@ -615,12 +618,14 @@ fun requestStateFromRemoteNetwork(
             localRelayAddress,
             externalStateAddress,
             networkName,
+            externalStateParticipants,
             config["RELAY_TLS"]!!.toBoolean(),
             config["RELAY_TLSCA_TRUST_STORE"]!!,
             config["RELAY_TLSCA_TRUST_STORE_PASSWORD"]!!,
             config["RELAY_TLSCA_CERT_PATHS"]!!
         ).fold({
             println("Error in Interop Flow: ${it.message}")
+            exitProcess(1)
         }, {
             linearId = it.toString()
             println("Interop flow successful and external-state was stored with linearId $linearId.\n")
